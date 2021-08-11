@@ -23,15 +23,11 @@
         type="password"
       >
       </v-text-field>
-      <v-row justify="end" class="px-3">
-        <router-link to="/about">Esqueceu a senha?</router-link>
+      <v-row justify="center">
+        <span class="text-caption px-3 my-2">Você está se autenticando como administrador do sistema. Se você não possui os privilégios necessários, por favor retorne para a página de login clicando <router-link to="/" class="red--text">aqui</router-link>
+        </span>
       </v-row>
       <v-row class="my-3" justify="center">
-        <v-col cols="6">
-          <v-btn :to="'/register'" block color="primary" outlined>
-            <span class="black--text">Cadastre-se</span>
-          </v-btn>
-        </v-col>
         <v-col cols="6">
           <v-btn @click="login" block color="primary">
             <span>Entrar</span>
@@ -46,7 +42,7 @@
 
 <script>
 import Vue from "vue";
-import LoginRequest from "./../../requests/LoginRequest.js";
+import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
   export default Vue.extend({
     data: () => ({
       valid: null,
@@ -58,13 +54,13 @@ import LoginRequest from "./../../requests/LoginRequest.js";
     methods: {
       async login() {
         try {
-          const loginRequest = new LoginRequest (this.user.email, this.user.password)
+          const loginRequest = new AdminLoginRequest (this.user.email, this.user.password)
           const loginResponse = await loginRequest.send()
 
           this.$store.dispatch('actionSetUser', loginResponse.data.user)
           this.$store.dispatch('actionSaveUser')
 
-          this.$router.push('/about')
+          this.$router.push('/')
         } catch (error) {
           console.log(error.response.data.message)
         }

@@ -2,15 +2,15 @@
   <div id="app">
     <div id="nav">
       <v-app id="inspire">
-      <v-navigation-drawer class="text-left" v-model="drawer" app>
-        <v-list-item>
+      <v-navigation-drawer class="text-left" v-model="drawer" v-if="!['Login', 'Signup', 'Admin'].includes(this.$router.currentRoute.name)" app>
+        <v-list-item class="primary">
           <v-list-item-content>
-            <v-list-item-title class="text-h6">
-              Menu
+            <v-list-item-title class="text-h6 secondary--text">
+              Barbearia MKO
             </v-list-item-title>
-            <v-list-item-subtitle>
+            <!-- <v-list-item-subtitle>
               subtext
-            </v-list-item-subtitle>
+            </v-list-item-subtitle> -->
           </v-list-item-content>
         </v-list-item>
 
@@ -37,10 +37,10 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-app-bar app>
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar app color="primary">
+        <v-app-bar-nav-icon v-if="!['Login', 'Signup', 'Admin'].includes(this.$router.currentRoute.name)" class="secondary--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>Barbearia MKO</v-toolbar-title>
+        <v-toolbar-title class="secondary--text">{{ this.$router.currentRoute.name }}</v-toolbar-title>
       </v-app-bar>
 
       <v-main>
@@ -56,12 +56,11 @@
   export default {
     data: () => ({
       items: [
-        { title: 'Home', icon: 'mdi-home', to: '/' },
-        { title: 'Login', icon: 'mdi-login', to: '/login' },
+        { title: 'Login', icon: 'mdi-login', to: '/' },
         { title: 'About', icon: 'mdi-help-box', to: '/about' },
       ],
       drawer: null
-    }),
+    })
   }
 </script>
 
@@ -77,12 +76,7 @@
   padding: 20px;
 
   a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    text-decoration: none;
   }
 }
 </style>
