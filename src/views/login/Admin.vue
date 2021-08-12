@@ -60,7 +60,7 @@ import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
           this.$store.dispatch('actionSetUser', loginResponse.data.user)
           this.$store.dispatch('actionSaveUser')
 
-          this.$router.push('/')
+          this.$router.push('/home')
         } catch (error) {
           console.log(error.response.data.message)
         }
