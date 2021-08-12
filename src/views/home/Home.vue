@@ -36,7 +36,6 @@ import GenerateCodeRequest from '../../requests/GenerateCodeRequest'
       async generateCode(customer_id) {
         try {
           this.loading = true
-          new GenerateCodeRequest(this.$store.state.user.token, customer_id)
           const generateCodeRequest = new GenerateCodeRequest(this.$store.state.user.token, customer_id)
           const generateCodeResponse = await generateCodeRequest.send()
 
