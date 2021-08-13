@@ -29,11 +29,27 @@
       </v-row>
       <v-row class="my-3" justify="center">
         <v-col cols="6">
-          <v-btn @click="login" block color="primary">
+          <v-btn 
+            @click="login" 
+            block 
+            color="primary"
+            :loading="loading"
+            :disabled="loading"
+          >
             <span>Entrar</span>
           </v-btn>
         </v-col>
       </v-row>
+      <v-snackbar color="error" :timeout="6000" v-model="error">
+        <span>
+          {{ errorMessage }}
+        </span>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="closeError">
+            Fechar
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-form>
 
     </v-col>
@@ -45,7 +61,10 @@ import Vue from "vue";
 import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
   export default Vue.extend({
     data: () => ({
+      error: null,
+      errorMessage: null,
       valid: null,
+      loading: null,
       user: {
         email: null,
         password: null
@@ -54,6 +73,7 @@ import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
     methods: {
       async login() {
         try {
+          this.loading = true
           const loginRequest = new AdminLoginRequest (this.user.email, this.user.password)
           const loginResponse = await loginRequest.send()
 
@@ -62,8 +82,16 @@ import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
 
           this.$router.push('/home')
         } catch (error) {
-          console.log(error.response.data.message)
+          setTimeout(() => {
+            this.loading = false
+          }, 6000);
+          this.error = true
+          this.errorMessage = error.response.data.message ?? 'Ocorreu um erro inesperado. Por favor tente novamente mais tarde.'
         }
+      },
+      closeError() {
+        this.error = false
+        this.loading = false
       }
     }
   })
