@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Admin from '../views/login/Admin.vue'
 import Login from '../views/login/Login.vue'
 import Home from '../views/home/Home.vue'
+import store from '../store/index.js'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,10 @@ const routes = [
     component: Home
   },
   {
+    path: '/logout',
+    name: 'Logout'
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
@@ -36,6 +41,25 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach(async (to, from, next) => {
+  if (localStorage.getItem('user') !== null && to.name !== 'Logout') {
+    await store.dispatch('actionRestoreUser')
+  }
+  if (to.name === 'Admin' && store.state.user.token !== undefined) {
+    await store.dispatch('actionRestoreUser')
+    next('/home')
+  } else if ((to.name !== 'Login' && to.name !== 'Admin') && store.state.user.token === undefined) {
+    next('/')
+  } else if (to.name === 'Logout') {
+    localStorage.removeItem('user')
+    store.dispatch('actionRemoveUser')
+    next('/')
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    next()
+  }
 })
 
 export default router

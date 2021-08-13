@@ -8,9 +8,9 @@
             <v-list-item-title class="text-h6 secondary--text">
               Barbearia MKO
             </v-list-item-title>
-            <!-- <v-list-item-subtitle>
-              subtext
-            </v-list-item-subtitle> -->
+            <v-list-item-subtitle class="secondary--text">
+              Olá, {{ this.$store.state.user.name }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
@@ -56,11 +56,12 @@
   export default {
     data: () => ({
       items: [
-        { title: 'Login', icon: 'mdi-login', to: '/' },
         { title: 'About', icon: 'mdi-help-box', to: '/about' },
+        { title: 'Logout', icon: 'mdi-logout', to: '/logout' },
       ],
+      token: undefined,
       drawer: null
-    })
+    }),
   }
 </script>
 
@@ -70,6 +71,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.code-button {
+  letter-spacing: 5px !important;
 }
 
 #nav {
