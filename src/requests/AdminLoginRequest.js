@@ -4,7 +4,7 @@ export default class LoginRequest {
   constructor(username, password) {
     this.username = username,
     this.password = password,
-    this.baseUrl = 'http://localhost:3000/barber/auth'
+    this.baseUrl = `${window.config.API_URL}/barber/auth`
   }
 
   send() {

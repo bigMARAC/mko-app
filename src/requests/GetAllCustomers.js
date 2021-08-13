@@ -3,7 +3,7 @@ import axios from 'axios'
 export default class GetAllCustomers {
   constructor(token) {
     this.token = token
-    this.baseUrl = 'http://localhost:3000/customer/getall'
+    this.baseUrl = `${window.config.API_URL}/customer/getall`
   }
 
   send() {
