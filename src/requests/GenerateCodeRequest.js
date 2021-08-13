@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default class LoginRequest {
+export default class GenerateCodeRequest {
   constructor(token, customer_id) {
     this.token = token
     this.customer_id = customer_id,
