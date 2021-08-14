@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Admin from '../views/login/Admin.vue'
 import Login from '../views/login/Login.vue'
-import Home from '../views/home/Home.vue'
+import AdminHome from '../views/home/AdminHome.vue'
 import store from '../store/index.js'
 
 Vue.use(VueRouter)
@@ -19,9 +19,9 @@ const routes = [
     component: Admin
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home
+    path: '/admin/home',
+    name: 'AdminHome',
+    component: AdminHome
   },
   {
     path: '/logout',
@@ -43,7 +43,7 @@ const router = new VueRouter({
   routes
 })
 
-const adminRoutes = [ 'Admin', 'Home' ]
+const adminRoutes = [ 'Admin', 'AdminHome' ]
 
 router.beforeEach(async (to, from, next) => {
   if (store.state.user.token == undefined && localStorage.getItem('user') !== null && to.name !== 'Logout') {
@@ -51,14 +51,14 @@ router.beforeEach(async (to, from, next) => {
   }
   if ((to.name === 'Admin' || to.name === 'Login') && store.state.user.token !== undefined) {
     await store.dispatch('actionRestoreUser')
-    next(store.state.admin ? '/home' : '/about')
+    next(store.state.admin ? '/admin/home' : '/about')
   } else if ((to.name !== 'Login' && to.name !== 'Admin') && store.state.user.token === undefined) {
     next('/')
   } else if (to.name === 'Logout') {
     localStorage.removeItem('user')
     store.dispatch('actionRemoveUser')
     next('/')
-  } else if (adminRoutes.includes(to.name) && !store.state.admin) {
+  } else if (adminRoutes.includes(to.name) && !store.state.admin && store.state.user.token !== undefined) {
     next(from)
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' })

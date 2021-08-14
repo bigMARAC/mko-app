@@ -41,7 +41,7 @@
 
 <script>
 import GenerateCodeRequest from '../../requests/GenerateCodeRequest'
-import GetAllCustomers from "./../../requests/GetAllCustomers.js";
+import GetAllCustomers from "../../requests/GetAllCustomers.js";
   export default {
     data: () => ({
       loading: [true],
