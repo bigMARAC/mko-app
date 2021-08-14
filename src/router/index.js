@@ -44,10 +44,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (localStorage.getItem('user') !== null && to.name !== 'Logout') {
+  if (store.state.user.token == undefined && localStorage.getItem('user') !== null && to.name !== 'Logout') {
     await store.dispatch('actionRestoreUser')
   }
-  if (to.name === 'Admin' && store.state.user.token !== undefined) {
+  if (to.name === 'Admin' && store.state.admin) {
     await store.dispatch('actionRestoreUser')
     next('/home')
   } else if ((to.name !== 'Login' && to.name !== 'Admin') && store.state.user.token === undefined) {
