@@ -64,7 +64,7 @@ import LoginRequest from "./../../requests/LoginRequest.js";
           this.$store.dispatch('actionSetUser', loginResponse.data.user)
           this.$store.dispatch('actionSaveUser')
 
-          this.$router.push('/about')
+          this.$router.push('/home')
         } catch (error) {
           console.log(error.response.data.message)
         }

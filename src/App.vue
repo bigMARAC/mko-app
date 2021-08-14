@@ -56,7 +56,8 @@
   export default {
     data: () => ({
       items: [
-        { title: 'About', icon: 'mdi-help-box', to: '/about' },
+        { title: 'Resgatar Código', icon: 'mdi-home', to: '/home' },
+        { title: 'Códigos Resgatados', icon: 'mdi-qrcode', to: '/codes' },
         { title: 'Logout', icon: 'mdi-logout', to: '/logout' },
       ],
       token: undefined,
@@ -83,5 +84,9 @@
   a {
     text-decoration: none;
   }
+}
+
+.v-slide-group__content {
+  justify-content: center !important;
 }
 </style>
