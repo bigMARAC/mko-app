@@ -43,19 +43,23 @@ const router = new VueRouter({
   routes
 })
 
+const adminRoutes = [ 'Admin', 'Home' ]
+
 router.beforeEach(async (to, from, next) => {
   if (store.state.user.token == undefined && localStorage.getItem('user') !== null && to.name !== 'Logout') {
     await store.dispatch('actionRestoreUser')
   }
-  if (to.name === 'Admin' && store.state.admin) {
+  if ((to.name === 'Admin' || to.name === 'Login') && store.state.user.token !== undefined) {
     await store.dispatch('actionRestoreUser')
-    next('/home')
+    next(store.state.admin ? '/home' : '/about')
   } else if ((to.name !== 'Login' && to.name !== 'Admin') && store.state.user.token === undefined) {
     next('/')
   } else if (to.name === 'Logout') {
     localStorage.removeItem('user')
     store.dispatch('actionRemoveUser')
     next('/')
+  } else if (adminRoutes.includes(to.name) && !store.state.admin) {
+    next(from)
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' })
     next()
