@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: '/admin/home',
-    name: 'AdminHome',
+    name: 'Clientes',
     component: AdminHome
   },
   {
@@ -47,7 +47,7 @@ const router = new VueRouter({
   routes
 })
 
-const adminRoutes = [ 'Admin', 'AdminHome' ]
+const adminRoutes = [ 'Admin', 'Clientes' ]
 
 router.beforeEach(async (to, from, next) => {
   if (store.state.user.token == undefined && localStorage.getItem('user') !== null && to.name !== 'Logout') {

@@ -82,9 +82,7 @@ import AdminLoginRequest from "./../../requests/AdminLoginRequest.js";
 
           this.$router.push('/admin/home')
         } catch (error) {
-          setTimeout(() => {
-            this.loading = false
-          }, 6000);
+          this.loading = false
           this.error = true
           this.errorMessage = error.response.data.message ?? 'Ocorreu um erro inesperado. Por favor tente novamente mais tarde.'
         }
