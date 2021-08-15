@@ -22,6 +22,16 @@
             :disabled="disable"
           >{{ text }}</v-btn>
       </v-form>
+      <v-snackbar color="error" :timeout="6000" v-model="error">
+        <span>
+          {{ errorMessage }}
+        </span>
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="closeError">
+            Fechar
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-col>
   </v-row>
 </template>
@@ -35,7 +45,9 @@ import RevokeCodeRequest from '../../requests/RevokeCodeRequest'
       text: "Resgatar Código",
       loading: null,
       disable: null,
-      code: null
+      code: null,
+      error: null,
+      errorMessage: null
     }),
     methods: {
       async revokeCode() {
@@ -44,17 +56,26 @@ import RevokeCodeRequest from '../../requests/RevokeCodeRequest'
         try {
           const revokeCodeRequest = new RevokeCodeRequest(this.code)
           const revokeCodeResponse = await revokeCodeRequest.send()
+
+          this.loading = false
+          this.disable = false
+
           if (revokeCodeResponse.status == 200) {
-            setTimeout(() => {
-              this.text = "Código Regastado"
-              this.loading = false
-              this.disable = false
-              this.color = "light-green darken-3"
-            }, 2000);
+            this.$router.push('/codes')
           }
         } catch (error) {
-          console.log(error)
+          setTimeout(() => {
+            this.loading = false
+            this.disable = false
+          }, 6000);
+          this.error = true
+          this.errorMessage = error.response.data.message ?? 'Ocorreu um erro inesperado. Por favor tente novamente mais tarde.'
         }
+      },
+      closeError() {
+        this.error = false
+        this.loading = false
+        this.disable = false
       }
     }
   })
