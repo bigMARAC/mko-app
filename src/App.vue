@@ -21,7 +21,7 @@
           nav
         >
           <v-list-item
-            v-for="item in items"
+            v-for="item in listShortcuts"
             :key="item.title"
             :to="item.to"
             link
@@ -53,16 +53,29 @@
 </template>
 
 <script>
+import store from './store'
   export default {
     data: () => ({
-      items: [
-        { title: 'Resgatar Código', icon: 'mdi-home', to: '/home' },
-        { title: 'Códigos Resgatados', icon: 'mdi-qrcode', to: '/codes' },
-        { title: 'Logout', icon: 'mdi-logout', to: '/logout' },
-      ],
-      token: undefined,
       drawer: null
     }),
+    computed: {
+      listShortcuts: () => {
+        let shortcuts = []
+        if (store.state.admin) {
+          shortcuts = [
+            { title: 'Clientes', icon: 'mdi-account-group', to: '/admin/home' },
+            { title: 'Sair', icon: 'mdi-logout', to: '/logout' }
+          ]
+        } else {
+          shortcuts = [
+            { title: 'Resgatar Código', icon: 'mdi-home', to: '/home' },
+            { title: 'Códigos Resgatados', icon: 'mdi-qrcode', to: '/codes' },
+            { title: 'Sair', icon: 'mdi-logout', to: '/logout' },
+          ]
+        }
+        return shortcuts
+      }
+    }
   }
 </script>
 
