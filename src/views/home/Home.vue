@@ -1,7 +1,7 @@
 <template>
   <v-row style="height: 80vh" justify="center" align="center">
     <v-col cols="12" md="5" lg="5" align="center">
-      <v-form>
+      <v-form v-model="valid" ref="codes_form">
         <v-text-field
           v-model="code"
           label="Código"
@@ -11,6 +11,8 @@
           outlined
           dense
           ripple
+          :rules="codeRules"
+          :counter="maxCodes"
         >
         </v-text-field>
         <v-btn
@@ -40,34 +42,44 @@
 import Vue from "vue";
 import RevokeCodeRequest from '../../requests/RevokeCodeRequest'
   export default Vue.extend({
-    data: () => ({
+    data: (instance) => ({
+      valid: null,
       color: "primary",
       text: "Resgatar Código",
+      maxCodes: 7,
       loading: null,
       disable: null,
       code: null,
       error: null,
-      errorMessage: null
+      errorMessage: null,
+      codeRules: [
+        v => !!v || 'O campo é obrigatório',
+        v => (v || '').length == instance.maxCodes || `O código precisa ter ${instance.maxCodes} caracteres`
+      ]
     }),
     methods: {
       async revokeCode() {
-        this.loading = true
-        this.disable = true
         try {
-          const revokeCodeRequest = new RevokeCodeRequest(this.code)
-          const revokeCodeResponse = await revokeCodeRequest.send()
+          if (this.$refs.codes_form.validate()) {
+            this.loading = true
+            this.disable = true
+            const revokeCodeRequest = new RevokeCodeRequest(this.code)
+            const revokeCodeResponse = await revokeCodeRequest.send()
 
-          this.loading = false
-          this.disable = false
-
-          if (revokeCodeResponse.status == 200) {
-            this.$router.push('/codes')
-          }
-        } catch (error) {
-          setTimeout(() => {
             this.loading = false
             this.disable = false
-          }, 6000);
+
+            if (revokeCodeResponse.status == 200) {
+              this.$router.push('/codes')
+            }
+          } else {
+            this.errorMessage = 'Campos Inválidos'
+            this.error = true
+            this.loading = false
+          }
+        } catch (error) {
+          this.loading = false
+          this.disable = false
           this.error = true
           this.errorMessage = error.response.data.message ?? 'Ocorreu um erro inesperado. Por favor tente novamente mais tarde.'
         }
